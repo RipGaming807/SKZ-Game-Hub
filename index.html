@@ -29,11 +29,35 @@
         <option value="clouds">Cosmic Clouds</option>
       </select>
     </div>
+
+    <!-- Admin Upload Panel (auto-hidden via JS for non-admins) -->
+    <div class="upload-panel" id="uploadPanel">
+      <h3>📄 Upload Your Game Files</h3>
+      <p>Upload HTML, CSS, JS and Thumbnail image</p>
+
+      <div class="upload-box">
+        <label>📂 HTML File</label>
+        <input type="file" id="htmlFile" accept=".html" />
+
+        <label>🎨 CSS File</label>
+        <input type="file" id="cssFile" accept=".css" />
+
+        <label>🧠 JS File</label>
+        <input type="file" id="jsFile" accept=".js" />
+
+        <label>🖼️ Thumbnail</label>
+        <input type="file" id="thumbnailFile" accept="image/*" />
+
+        <button id="uploadBtn">🚀 Upload Game</button>
+      </div>
+    </div>
   </header>
 
   <main>
     <h2>🕹️ Game Zone</h2>
-    <div id="gamesList" class="games-list"></div>
+    <div id="gamesList" class="games-list">
+      <!-- Game cards will be injected here -->
+    </div>
   </main>
 
   <footer>
@@ -41,5 +65,12 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // Auto-hide upload panel for public
+    if (!location.hostname.includes("repl.co")) {
+      const uploadBox = document.getElementById("uploadPanel");
+      if (uploadBox) uploadBox.style.display = "none";
+    }
+  </script>
 </body>
 </html>
