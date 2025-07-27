@@ -1,20 +1,19 @@
-📁 Folder: SKZ_Game_Hub/
-
-📄 1. index.html
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SKZ Game Hub</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚡ SKZ Game Hub ⚡</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark-theme bg-black">
+
   <header>
-    <h1><span class="glow">⚡ SKZ Game Hub ⚡</span></h1>
+    <h1><span class="glow">🎮 SKZ Game Hub 🎮</span></h1>
+    
+    <!-- Theme & Background Controls -->
     <div class="controls">
-      <label for="bgSelect">🎮 Background:</label>
+      <label for="bgSelect">🌌 Background:</label>
       <select id="bgSelect">
         <option value="black">Default Black</option>
         <option value="fantasy">Fantasy World</option>
@@ -27,173 +26,35 @@
     </div>
   </header>
 
-  <main>
-    <section id="authPanel" class="auth-panel">
-      <h3>🔐 Login to Save Progress</h3>
-      <button onclick="loginWithGoogle()">Login with Google</button>
-      <input type="email" id="emailInput" placeholder="Enter your email" />
-      <button onclick="sendOtpToEmail()">Send OTP</button>
-      <input type="text" id="otpInput" placeholder="Enter OTP" />
-      <button onclick="verifyOtp()">Verify</button>
-      <button onclick="continueAsGuest()">Continue as Guest</button>
-    </section>
+  <!-- Login / Signup Panel -->
+  <section class="auth-panel" id="authPanel">
+    <h2>👤 Login or Signup</h2>
+    <input type="email" id="emailInput" placeholder="Enter your email" required />
+    <button onclick="sendVerificationCode()">📩 Send Verification Code</button>
 
+    <input type="text" id="codeInput" placeholder="Enter verification code" style="display:none;" />
+    <button id="verifyBtn" onclick="verifyCode()" style="display:none;">✅ Verify & Login</button>
+  </section>
+
+  <!-- Logout Button -->
+  <div id="logoutSection" style="display:none; text-align:center; margin-top:10px;">
+    <p>✅ Logged in as <span id="userEmail" style="font-weight:bold;"></span></p>
+    <button onclick="logoutUser()">🚪 Logout</button>
+  </div>
+
+  <!-- Game Zone -->
+  <main>
     <h2>🕹️ Game Zone</h2>
-    <div id="gamesList" class="games-list"></div>
+    <div id="gamesList" class="games-list">
+      <!-- Games will load here from backend -->
+    </div>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>© 2025 SKZ Studios | By Commander Zunair 👨‍✈️</p>
+    <p>© 2025 SKZ Studios | Developed by Commander Zunair 👨‍✈️</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-```
-
-📄 2. style.css
-```css
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
-  transition: background 0.5s, color 0.5s;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center center;
-}
-
-.dark-theme { color: white; }
-.bg-black { background-color: #121212 !important; }
-.bg-fantasy { background-image: url('https://i.postimg.cc/k4wt955h/3d-fantasy-scene-1.jpg'); }
-.bg-spooky { background-image: url('https://i.postimg.cc/BbXyVCsw/spooky-outdoors-background.jpg'); }
-.bg-urban { background-image: url('https://i.postimg.cc/zDHYpJBD/multi-dimensional-urban-space-exotic-concepts-digital-painting.jpg'); }
-.bg-nebula { background-image: url('https://i.postimg.cc/2Sws3yHG/ultra-detailed-nebula-abstract-wallpaper-4.jpg'); }
-.bg-planet { background-image: url('https://i.postimg.cc/rmd3hJqZ/fictional-planet-with-colourful-night-sky-stars-nebula.jpg'); }
-.bg-clouds { background-image: url('https://i.postimg.cc/8z138D16/pink-cosmic-clouds-space-background.jpg'); }
-
-header {
-  padding: 20px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-.glow {
-  color: #00f7ff;
-  text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
-}
-.controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-select {
-  padding: 6px 12px;
-  border-radius: 6px;
-  background-color: #222;
-  color: white;
-  border: none;
-}
-.auth-panel {
-  background: rgba(0,0,0,0.6);
-  padding: 20px;
-  max-width: 400px;
-  margin: 30px auto;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #00f7ff;
-  text-align: center;
-}
-.auth-panel input, .auth-panel button {
-  margin-top: 10px;
-  width: 90%;
-  padding: 10px;
-  font-size: 16px;
-}
-```
-
-📄 3. script.js
-```js
-const API_BASE_URL = 'https://your-backend.replit.app';
-const gameListEl = document.getElementById("gamesList");
-
-window.addEventListener("load", () => {
-  const savedBg = localStorage.getItem("skz_bg");
-  if (savedBg) {
-    document.body.classList.add("bg-" + savedBg);
-    document.getElementById("bgSelect").value = savedBg;
-  }
-
-  fetch(`${API_BASE_URL}/api/games`)
-    .then(res => res.json())
-    .then(games => games.forEach(renderGameCard))
-    .catch(err => console.error("Error:", err));
-});
-
-document.getElementById("bgSelect").addEventListener("change", function () {
-  document.body.className = "dark-theme";
-  document.body.classList.add("bg-" + this.value);
-  localStorage.setItem("skz_bg", this.value);
-});
-
-function renderGameCard(gameData) {
-  const card = document.createElement("div");
-  card.className = "game-card";
-  card.innerHTML = `
-    <div class="game-thumbnail-container">
-      <img src="${gameData.thumbnail}" />
-      <button class="play-btn" onclick="previewGame(this)">▶</button>
-    </div>
-    <div class="game-content" style="display:none;">
-      <style>${gameData.css}</style>
-      ${gameData.html}
-      <script>${gameData.js}<\/script>
-    </div>
-  `;
-  gameListEl.appendChild(card);
-}
-
-function previewGame(btn) {
-  const html = btn.closest(".game-card").querySelector(".game-content").innerHTML;
-  const win = window.open("", "", "width=800,height=600");
-  win.document.write(html);
-  win.document.close();
-}
-
-function loginWithGoogle() {
-  window.location.href = `${API_BASE_URL}/auth/google`;
-}
-
-function sendOtpToEmail() {
-  const email = document.getElementById("emailInput").value;
-  fetch(`${API_BASE_URL}/auth/send-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
-  }).then(() => alert("OTP sent!"));
-}
-
-function verifyOtp() {
-  const email = document.getElementById("emailInput").value;
-  const otp = document.getElementById("otpInput").value;
-  fetch(`${API_BASE_URL}/auth/verify-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, otp })
-  })
-  .then(res => res.json())
-  .then(data => {
-    localStorage.setItem("skz_token", data.token);
-    alert("✅ Logged in successfully!");
-  })
-  .catch(() => alert("❌ Verification failed"));
-}
-
-function continueAsGuest() {
-  alert("🔓 You are playing as Guest. Data will not be saved.");
-}
-```
-
-✅ Ye files ab completely ready hain login system ke integration ke liye.  
-Next: backend ka final code chaheye toh batao, main `auth`, `OTP`, and `token` wala backend code bhi dedungi. ☕
