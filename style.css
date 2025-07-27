@@ -1,13 +1,7 @@
-/* === RESET & GLOBAL === */
-* {
+body {
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-  padding-bottom: 150px;
   transition: background 0.5s, color 0.5s;
   background-size: cover;
   background-repeat: no-repeat;
@@ -15,12 +9,8 @@ body {
   background-position: center center;
 }
 
-/* === THEMES === */
-body.light-theme {
-  color: #121212;
-}
-body.dark-theme {
-  color: #ffffff;
+.dark-theme {
+  color: white;
 }
 
 /* === BACKGROUNDS === */
@@ -32,44 +22,38 @@ body.dark-theme {
 .bg-planet { background-image: url('https://i.postimg.cc/rmd3hJqZ/fictional-planet-with-colourful-night-sky-stars-nebula.jpg'); }
 .bg-clouds { background-image: url('https://i.postimg.cc/8z138D16/pink-cosmic-clouds-space-background.jpg'); }
 
-/* === HEADER === */
 header {
   padding: 20px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.7);
 }
+
 .glow {
   color: #00f7ff;
   text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
 }
 
-/* === CONTROLS === */
 .controls {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  margin-top: 10px;
   gap: 15px;
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 10px;
-  border-radius: 8px;
+  flex-wrap: wrap;
 }
-.controls label {
-  font-weight: bold;
-}
+
 select {
   padding: 6px 12px;
   border-radius: 6px;
-  border: none;
   background-color: #222;
   color: white;
+  border: none;
 }
 
-/* === GAME ZONE === */
 main {
   padding: 30px 20px;
   text-align: center;
 }
+
 main h2 {
   font-size: 2rem;
   text-shadow: 0 0 8px #0ff;
@@ -93,16 +77,18 @@ main h2 {
   overflow: hidden;
   transition: transform 0.3s;
 }
+
 .game-card:hover {
   transform: scale(1.02);
 }
 
 .game-thumbnail-container {
   position: relative;
-  width: 350px;
-  height: 200px;
+  width: 100%;
+  height: 240px;
   overflow: hidden;
 }
+
 .game-thumbnail-container img {
   width: 100%;
   height: 100%;
@@ -137,26 +123,28 @@ main h2 {
   z-index: 2;
   transition: background 0.3s, transform 0.2s;
 }
+
 .play-btn:hover {
   background-color: #00ffff;
   transform: translate(-50%, -50%) scale(1.1);
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
   text-align: center;
   padding: 10px;
   color: #00ffff;
   font-size: 0.9rem;
   border-top: 1px solid #333;
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
 @media screen and (max-width: 700px) {
+  .game-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .game-thumbnail-container {
-    width: 100%;
     height: 200px;
   }
 }
