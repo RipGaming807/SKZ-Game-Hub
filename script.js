@@ -60,28 +60,37 @@ document.getElementById("loginForm")?.addEventListener("submit", (e) => {
     });
 });
 
-// === Render Game Card ===
+// === Render Game Card using iframe-safe blob ===
 function renderGameCard(gameData) {
-  const gameFrame = `
-    <style>${gameData.css}</style>
-    ${gameData.html}
-    <script>${gameData.js}<\/script>
-  `;
-
   const card = document.createElement("div");
   card.className = "game-card";
   card.dataset.id = gameData._id || "";
+
+  const gameBlob = new Blob([
+    `
+    <html>
+    <head>
+      <style>${gameData.css}</style>
+    </head>
+    <body>
+      ${gameData.html}
+      <script>${gameData.js}<\/script>
+    </body>
+    </html>
+    `
+  ], { type: "text/html" });
+
+  const gameURL = URL.createObjectURL(gameBlob);
 
   card.innerHTML = `
     <div class="game-thumbnail-container">
       <img src="${gameData.thumbnail}" alt="Game Thumbnail" />
       <div class="three-dots" onclick="toggleMenu(this)">⋮</div>
-      <button class="play-btn" onclick="previewGame(this)">▶</button>
+      <button class="play-btn" onclick="previewGame('${gameURL}')">▶</button>
     </div>
     <div class="menu-dropdown" style="display:none;">
       ${isAdmin() ? `<button onclick="removeGame(this)">🗑️ Remove</button>` : ""}
     </div>
-    <div class="game-content" style="display:none;">${gameFrame}</div>
   `;
 
   gameListEl.appendChild(card);
@@ -91,11 +100,8 @@ function isAdmin() {
   return localStorage.getItem("user_email") === "admin@skz.com";
 }
 
-function previewGame(button) {
-  const gameHTML = button.closest(".game-card").querySelector(".game-content").innerHTML;
-  const win = window.open("", "_blank", "width=800,height=600");
-  win.document.write(gameHTML);
-  win.document.close();
+function previewGame(gameURL) {
+  window.open(gameURL, "_blank", "width=800,height=600");
 }
 
 function toggleMenu(dotBtn) {
