@@ -2,18 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>⚡ SKZ Game Hub ⚡</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKZ Game Hub</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark-theme bg-black">
-
   <header>
-    <h1><span class="glow">🎮 SKZ Game Hub 🎮</span></h1>
-    
-    <!-- Theme & Background Controls -->
+    <h1><span class="glow">⚡ SKZ Game Hub ⚡</span></h1>
     <div class="controls">
-      <label for="bgSelect">🌌 Background:</label>
+      <label for="bgSelect">🎮 Background:</label>
       <select id="bgSelect">
         <option value="black">Default Black</option>
         <option value="fantasy">Fantasy World</option>
@@ -26,33 +23,15 @@
     </div>
   </header>
 
-  <!-- Login / Signup Panel -->
-  <section class="auth-panel" id="authPanel">
-    <h2>👤 Login or Signup</h2>
-    <input type="email" id="emailInput" placeholder="Enter your email" required />
-    <button onclick="sendVerificationCode()">📩 Send Verification Code</button>
-
-    <input type="text" id="codeInput" placeholder="Enter verification code" style="display:none;" />
-    <button id="verifyBtn" onclick="verifyCode()" style="display:none;">✅ Verify & Login</button>
-  </section>
-
-  <!-- Logout Button -->
-  <div id="logoutSection" style="display:none; text-align:center; margin-top:10px;">
-    <p>✅ Logged in as <span id="userEmail" style="font-weight:bold;"></span></p>
-    <button onclick="logoutUser()">🚪 Logout</button>
-  </div>
-
-  <!-- Game Zone -->
   <main>
     <h2>🕹️ Game Zone</h2>
     <div id="gamesList" class="games-list">
-      <!-- Games will load here from backend -->
+      <!-- Game cards will be injected here -->
     </div>
   </main>
 
-  <!-- Footer -->
   <footer>
-    <p>© 2025 SKZ Studios | Developed by Commander Zunair 👨‍✈️</p>
+    <p>© 2025 SKZ Studios | By Commander Zunair 👨‍✈️</p>
   </footer>
 
   <script src="script.js"></script>
