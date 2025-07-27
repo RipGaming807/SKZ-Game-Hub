@@ -1,8 +1,7 @@
 const gameListEl = document.getElementById("gamesList");
-const password = "548918";
 const API_BASE_URL = "https://c169a080-66fe-4290-9579-6403f25c388d-00-1tm2czosk7dde.picard.replit.dev";
 
-// === Restore Background on Load & Fetch Games ===
+// === Load background and games on window load ===
 window.addEventListener("load", () => {
   const savedBg = localStorage.getItem("skz_bg");
   if (savedBg) {
@@ -11,16 +10,16 @@ window.addEventListener("load", () => {
   }
 
   fetch(`${API_BASE_URL}/api/games`)
-    .then(res => res.json())
-    .then(games => {
-      games.forEach(game => renderGameCard(game));
+    .then((res) => res.json())
+    .then((games) => {
+      games.forEach((game) => renderGameCard(game));
     })
-    .catch(err => console.error("❌ Error fetching games:", err));
+    .catch((err) => console.error("❌ Error fetching games:", err));
 });
 
-// === Background Selector ===
+// === Background selection ===
 document.getElementById("bgSelect").addEventListener("change", function () {
-  document.body.classList.forEach(cls => {
+  document.body.classList.forEach((cls) => {
     if (cls.startsWith("bg-")) document.body.classList.remove(cls);
   });
 
@@ -29,46 +28,39 @@ document.getElementById("bgSelect").addEventListener("change", function () {
   localStorage.setItem("skz_bg", selected);
 });
 
-// === Upload Game (Admin Only) ===
-document.getElementById("uploadBtn")?.addEventListener("click", () => {
-  const userInput = prompt("Enter admin password:");
-  if (userInput !== password) {
-    alert("❌ Incorrect password. Upload denied.");
-    return;
-  }
+// === Login system ===
+document.getElementById("loginForm")?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.getElementById("emailInput").value;
+  if (!email) return alert("⚠️ Email required");
 
-  const htmlFile = document.getElementById("htmlFile").files[0];
-  const cssFile = document.getElementById("cssFile").files[0];
-  const jsFile = document.getElementById("jsFile").files[0];
-  const thumbnail = document.getElementById("thumbnailFile").files[0];
-
-  if (!htmlFile || !cssFile || !jsFile || !thumbnail) {
-    alert("⚠️ Please upload all required files.");
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("html", htmlFile);
-  formData.append("css", cssFile);
-  formData.append("js", jsFile);
-  formData.append("thumbnail", thumbnail);
-
-  fetch(`${API_BASE_URL}/api/games`, {
+  fetch(`${API_BASE_URL}/api/send-code`, {
     method: "POST",
-    body: formData,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
   })
     .then(res => res.json())
-    .then(game => {
-      alert("✅ Game uploaded successfully!");
-      renderGameCard(game);
-    })
-    .catch(err => {
-      console.error("❌ Upload failed:", err);
-      alert("❌ Upload error");
+    .then(data => {
+      const code = prompt("🔒 Enter verification code sent to your email:");
+      fetch(`${API_BASE_URL}/api/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code })
+      })
+        .then(res => res.json())
+        .then(result => {
+          if (result.success) {
+            alert("✅ Logged in successfully");
+            localStorage.setItem("user_email", email);
+            location.reload();
+          } else {
+            alert("❌ Verification failed");
+          }
+        });
     });
 });
 
-// === Render Game Card on Screen ===
+// === Render Game Card ===
 function renderGameCard(gameData) {
   const gameFrame = `
     <style>${gameData.css}</style>
@@ -87,7 +79,7 @@ function renderGameCard(gameData) {
       <button class="play-btn" onclick="previewGame(this)">▶</button>
     </div>
     <div class="menu-dropdown" style="display:none;">
-      <button onclick="removeGame(this)">🗑️ Remove</button>
+      ${isAdmin() ? `<button onclick="removeGame(this)">🗑️ Remove</button>` : ""}
     </div>
     <div class="game-content" style="display:none;">${gameFrame}</div>
   `;
@@ -95,7 +87,10 @@ function renderGameCard(gameData) {
   gameListEl.appendChild(card);
 }
 
-// === Preview Game in Popup Window ===
+function isAdmin() {
+  return localStorage.getItem("user_email") === "admin@skz.com";
+}
+
 function previewGame(button) {
   const gameHTML = button.closest(".game-card").querySelector(".game-content").innerHTML;
   const win = window.open("", "_blank", "width=800,height=600");
@@ -103,32 +98,26 @@ function previewGame(button) {
   win.document.close();
 }
 
-// === Toggle 3-Dot Menu ===
 function toggleMenu(dotBtn) {
   const dropdown = dotBtn.parentElement.nextElementSibling;
   dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
 }
 
-// === Delete Game from Backend ===
 function removeGame(button) {
   const card = button.closest(".game-card");
   const gameId = card.dataset.id;
 
-  const userInput = prompt("Enter admin password to remove this game:");
-  if (userInput !== password) {
-    alert("❌ Incorrect password. Game not removed.");
-    return;
-  }
+  if (!isAdmin()) return alert("❌ Only admin can delete games");
 
   fetch(`${API_BASE_URL}/api/games/${gameId}`, {
     method: "DELETE",
   })
-    .then(res => res.json())
+    .then((res) => res.json())
     .then(() => {
       card.remove();
       alert("✅ Game deleted from server.");
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("❌ Deletion failed:", err);
       alert("❌ Could not delete game.");
     });
