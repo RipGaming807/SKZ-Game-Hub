@@ -6,7 +6,9 @@
 }
 
 body {
-  padding-bottom: 150px;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
   transition: background 0.5s, color 0.5s;
   background-size: cover;
   background-repeat: no-repeat;
@@ -14,14 +16,8 @@ body {
   background-position: center center;
 }
 
-body.light-theme {
-  color: #121212;
-}
-body.dark-theme {
-  color: #ffffff;
-}
+.dark-theme { color: white; }
 
-/* === BACKGROUNDS === */
 .bg-black { background-color: #121212 !important; }
 .bg-fantasy { background-image: url('https://i.postimg.cc/k4wt955h/3d-fantasy-scene-1.jpg'); }
 .bg-spooky { background-image: url('https://i.postimg.cc/BbXyVCsw/spooky-outdoors-background.jpg'); }
@@ -35,40 +31,57 @@ header {
   text-align: center;
   background-color: rgba(0, 0, 0, 0.7);
 }
+
 .glow {
   color: #00f7ff;
   text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
 }
 
 .controls {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  margin-top: 10px;
   gap: 15px;
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 10px;
-  border-radius: 8px;
+  flex-wrap: wrap;
 }
-.controls label {
-  font-weight: bold;
-}
+
 select {
   padding: 6px 12px;
   border-radius: 6px;
-  border: none;
   background-color: #222;
   color: white;
+  border: none;
 }
 
-main {
-  padding: 30px 20px;
+.auth-panel {
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  max-width: 400px;
+  margin: 30px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00f7ff;
   text-align: center;
 }
-main h2 {
-  font-size: 2rem;
-  text-shadow: 0 0 8px #0ff;
-  margin-bottom: 20px;
+
+.auth-panel input, .auth-panel button {
+  margin-top: 10px;
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+.auth-panel button {
+  background-color: #00f7ff;
+  color: black;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.auth-panel button:hover {
+  background-color: #0ff;
+  transform: scale(1.02);
 }
 
 #gamesList {
@@ -88,6 +101,7 @@ main h2 {
   overflow: hidden;
   transition: transform 0.3s;
 }
+
 .game-card:hover {
   transform: scale(1.02);
 }
@@ -98,6 +112,7 @@ main h2 {
   height: 240px;
   overflow: hidden;
 }
+
 .game-thumbnail-container img {
   width: 100%;
   height: 100%;
@@ -119,35 +134,16 @@ main h2 {
   z-index: 2;
   transition: background 0.3s, transform 0.2s;
 }
+
 .play-btn:hover {
   background-color: #00ffff;
   transform: translate(-50%, -50%) scale(1.1);
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
   text-align: center;
-  padding: 10px;
   color: #00ffff;
+  padding: 20px;
   font-size: 0.9rem;
-  border-top: 1px solid #333;
 }
 
-@media screen and (max-width: 700px) {
-  .game-card {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .game-thumbnail-container {
-    height: 200px;
-  }
-
-  .play-btn {
-    font-size: 20px;
-    padding: 10px 18px;
-  }
-}
